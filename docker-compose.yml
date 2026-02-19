@@ -1,0 +1,19 @@
+services:
+  iris-backend:
+    build: ./backend
+    container_name: medmatch-iris-server
+    ports:
+      - "52773:52773"
+    volumes:
+      - ./:/home/irisowner/dev
+    ulimits:
+      stack: 67108864 # Increases Linux stack from 8MB to 64MB
+      memlock: -1 # Essential for Python/PyTorch memory mapping
+
+  angular-frontend:
+    build: ./frontend
+    container_name: medmatch-ui
+    ports:
+      - "8080:80"
+    depends_on:
+      - iris-backend

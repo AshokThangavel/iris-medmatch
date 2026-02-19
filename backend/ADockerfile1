@@ -1,0 +1,36 @@
+ARG IMAGE=intersystemsdc/irishealth-community
+FROM $IMAGE
+
+USER root
+
+# 1. Install system dependencies
+RUN apt-get update && apt-get install -y python3-pip && rm -rf /var/lib/apt/lists/*
+
+# 2. Install AI libraries
+# We use /usr/irissys/bin/irispython to ensure it's the exact version IRIS uses
+RUN /usr/irissys/bin/irispython -m pip install sentence-transformers
+
+WORKDIR /home/irisowner/dev
+
+# 3. Copy only the backend content (Assuming Docker context is ./backend)
+# If Docker context is root, use ./backend/ ./
+COPY --chown=irisowner:irisowner . ./
+
+RUN chown -R irisowner:irisowner /home/irisowner/dev
+
+# 4. Set Environment variables for IRIS and Python
+ENV PYTHON_PATH=/usr/irissys/bin/irispython \
+    # This helps IRIS find the pip-installed packages
+    PYTHONPATH=/usr/irissys/mgr/python \
+    PATH="/usr/irissys/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/irisowner/bin"
+
+# 5. Build the IRIS database
+# We use the internal manager user for the build phase
+USER irisowner
+
+RUN iris start IRIS \
+    && iris session IRIS < iris.script > /home/irisowner/dev/build.log 2>&1 \
+    && iris stop IRIS quietly
+
+# 6. Keep the container alive and stream logs
+ENTRYPOINT ["/bin/sh", "-c", "iris start IRIS && tail -f /usr/irissys/mgr/messages.log"]
