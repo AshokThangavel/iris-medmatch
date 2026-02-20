@@ -61,7 +61,7 @@ Once the project is started, you can access the different layers of the applicat
 
 #### **1. Frontend Interface (Angular)**
 
-* **URL:** [http://localhost:8080](https://www.google.com/search?q=http://localhost:8080/)
+* **URL:** [http://localhost:8080](http://localhost:8080/)
 * **What it is:** This is the user-facing dashboard.
 * **What you can do here:** * Search for patients using natural language.
 * View clinical similarity scores (e.g., "Patient A is a 95% match").
@@ -70,7 +70,7 @@ Once the project is started, you can access the different layers of the applicat
 
 #### **2. Backend Management (InterSystems IRIS)**
 
-* **URL:** [http://localhost:52773/csp/sys/UtilHome.csp](https://www.google.com/search?q=http://localhost:52773/csp/sys/UtilHome.csp)
+* **URL:** [http://localhost:52773/csp/sys/UtilHome.csp](http://localhost:52773/csp/sys/UtilHome.csp)
 * **What it is:** The **Management Portal** for the InterSystems IRIS database.
 
 <img width="1342" height="973" alt="image" src="https://github.com/user-attachments/assets/2199138d-431b-4711-bfef-5c909e2a114c" />
