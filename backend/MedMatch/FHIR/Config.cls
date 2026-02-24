@@ -6,7 +6,7 @@ ClassMethod Setup() As %Status
     Try {
          Do ..CreateInstance()
     } Catch(ex) {
-        Set ^zaxk.fhirsetup = ex.DisplayString()
+        Set ^medmatch.fhirsetup = ex.DisplayString()
         Write "Error installing FHIR Server: "_ex.DisplayString()
     }
 }
@@ -94,7 +94,7 @@ ClassMethod SeedTestData() As %Status
 
     Set sc = $$$OK
 
-    For i=1:1:100 {
+    For i=1:1:50 {
         // 1. Pick random data
         Set fName = $List(firstNames, $Random(10)+1)
         Set lName = $List(lastNames, $Random(10)+1)

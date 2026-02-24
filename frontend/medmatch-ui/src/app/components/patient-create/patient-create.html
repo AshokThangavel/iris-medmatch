@@ -1,0 +1,56 @@
+<div class="page-container">
+    <div class="form-card">
+
+        <div class="form-header">
+            <h2>New Patient Registration</h2>
+            <p>Enter administrative details for the FHIR record.</p>
+        </div>
+
+        <div class="form-grid">
+            <div class="field-group">
+                <label>First Name</label>
+                <input type="text" [(ngModel)]="firstName" placeholder="e.g. John">
+            </div>
+
+            <div class="field-group">
+                <label>Middle Name</label>
+                <input type="text" [(ngModel)]="middleName" placeholder="e.g. Quincy">
+            </div>
+
+            <div class="field-group full-width">
+                <label>Last Name</label>
+                <input type="text" [(ngModel)]="lastName" placeholder="e.g. Doe">
+            </div>
+
+            <div class="field-group">
+                <label>Gender</label>
+                <select [(ngModel)]="gender">
+                    <option value="unknown">Select...</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="field-group">
+                <label>Date of Birth</label>
+                <input type="date" [(ngModel)]="dob" name="dob" [max]="today">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-link" (click)="clearForm()">Reset Form</button>
+            <button class="btn-primary" (click)="submitPatient()">Save Patient</button>
+        </div>
+
+    </div>
+    <div class="error-banner" *ngIf="errorMessage" #errorContainer>
+        <div class="error-header">
+            <strong>⚠️ Validation Error</strong>
+            <button type="button" (click)="errorMessage = null">×</button>
+        </div>
+        <div class="error-details">
+            {{ errorMessage }}
+        </div>
+    </div>
+</div>

@@ -1,53 +1,27 @@
-<div class="app-container">
-  <header>
-    <h1>MedMatch AI <span class="badge">Patient Search</span></h1>
-  </header>
+<div class="app-wrapper" *ngIf="!isLoginPage()">
+  <aside class="main-sidebar">
+    <div class="brand">
+      <span class="brand-icon">🏥</span>
+      <span class="brand-text">IRIS MedMatch</span>
+    </div>
 
-  <div class="search-box">
-    <div class="input-group">
-      <input type="text" [(ngModel)]="searchTerm" (keyup.enter)="onSearch()"
-        placeholder="Search symptoms (e.g., back pain, Type 2 Diabetes, chronic pain, hypertension)..."
-        [disabled]="loading">
-      <button (click)="onSearch()" [disabled]="loading || !searchTerm">
-        <span *ngIf="!loading">Analyze Similarity</span>
-        <span *ngIf="loading" class="spinner"></span>
+    <nav class="nav-menu">
+      <a routerLink="/patient-list" routerLinkActive="active" class="nav-item">Patients</a>
+      <a routerLink="/new-patient" routerLinkActive="active" class="nav-item">New Patient</a>
+      <a routerLink="/condition-similarity" routerLinkActive="active" class="nav-item">Similarity Check</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" (click)="logout()">
+        <span>Logout</span>
       </button>
     </div>
-  </div>
+  </aside>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
 
-  <div class="status-bar" *ngIf="statusMessage">
-    <p [class.error]="statusMessage.includes('failed')">{{ statusMessage }}</p>
-  </div>
-
-  <div class="results-card" *ngIf="results.length > 0">
-    <div class="card-header">
-      <h2>Found {{ results.length }} Match(es)</h2>
-    </div>
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr>
-            <th>Patient</th>
-            <th>Patient ID</th>
-            <th>Condition</th>
-            <th class="text-right">Similarity Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let result of results">
-            <td>{{ result.patientName }}</td>
-            <td>
-              <span class="id-tag">{{ result.patientId }}</span>
-            </td>
-            <td>{{ result.condition }}</td>
-            <td class="text-right">
-              <span class="score-pill" [ngClass]="getScoreClass(result.similarity)">
-                {{ (result.similarity * 100).toFixed(2) }}%
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="login-wrapper" *ngIf="isLoginPage()">
+  <router-outlet></router-outlet>
 </div>

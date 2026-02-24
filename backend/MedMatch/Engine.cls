@@ -46,12 +46,27 @@ ClassMethod InitializeVectors() As %Status
     Return status
 }
 
+ClassMethod SaveConditionVector(Payload)
+{
+    Set id = Payload.fhirId
+    If id=""{
+        $$$ThrowOnError($$$ERROR($$$GeneralError, "conditoion resource id is missing"))
+    }
+    Set text = Payload.textToEmbed
+
+    If text=""{
+        $$$ThrowOnError($$$ERROR($$$GeneralError, "conditoion data is missing"))
+    }
+    Set sc = ##class(MedMatch.Data.VectorIndex).SaveVector("Condition", id, text)
+    Return sc
+}
+
 ClassMethod FindSimilarPatients(queryText As %String, limit As %Integer = 500) As %DynamicArray
 {
     Set results = []
     Set queryVector = ..GetVector(queryText)
     Set sql = "SELECT TOP ? idx.ResourceID, idx.ResourceType, VECTOR_COSINE(idx.NoteVector, TO_VECTOR(?)) AS Similarity,"_
-     "cond.Key, cond.patient_Reference, pat.value As patientName FROM MedMatch_Data.VectorIndex idx JOIN HSFHIR_X0001_S.Condition cond ON idx.ResourceID = cond._id_Value"_
+     "cond.Key, cond.patient_Reference, pat.value As patientName, idx.ConditionText ConditionText FROM MedMatch_Data.VectorIndex idx JOIN HSFHIR_X0001_S.Condition cond ON idx.ResourceID = cond._id_Value"_
      " JOIN HSFHIR_X0001_S_Patient.name pat ON pat.Key = cond.patient_Reference "_
      " GROUP BY idx.ResourceID "_
      "  ORDER BY Similarity DESC"
@@ -69,7 +84,8 @@ ClassMethod FindSimilarPatients(queryText As %String, limit As %Integer = 500) A
             "condition": (rset.%Get("Key")),
             "similarity": ($Normalize(rset.%Get("Similarity"), 4)),
             "resourceId": (rset.%Get("ResourceID")),
-            "patientName": (rset.%Get("patientName"))
+            "patientName": (rset.%Get("patientName")),
+            "conditionText":(rset.%Get("ConditionText"))
             }
         )
     }

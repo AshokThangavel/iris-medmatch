@@ -1,0 +1,178 @@
+:host {
+    display: block;
+    background-color: #f5f7f9;
+    /* Soft light gray page background */
+    min-height: 100vh;
+}
+
+.page-container {
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.form-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 650px;
+    border-radius: 8px;
+    border: 1px solid #d1d9e0;
+    /* Subtle border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* Very light shadow */
+}
+
+/* Header */
+.form-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.form-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #1a1c21;
+}
+
+.form-header p {
+    margin: 4px 0 0;
+    font-size: 0.875rem;
+    color: #586069;
+}
+
+/* Grid */
+.form-grid {
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+/* Fields */
+.field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-group label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #24292e;
+    margin-bottom: 6px;
+}
+
+.field-group input,
+.field-group select {
+    height: 38px;
+    padding: 0 12px;
+    font-size: 0.9375rem;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    background-color: #fafbfc;
+    color: #24292e;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.field-group input:focus,
+.field-group select:focus {
+    outline: none;
+    border-color: #0366d6;
+    /* Standard Blue */
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+/* Actions */
+.form-actions {
+    padding: 20px 32px;
+    background-color: #fafbfc;
+    border-top: 1px solid #e1e4e8;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+}
+
+.btn-primary {
+    background-color: #2ea44f;
+    /* Secure Green */
+    color: #fff;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #2c974b;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #586069;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.btn-link:hover {
+    color: #24292e;
+}
+
+.error-banner {
+    background-color: #fdf2f2;
+    border: 1px solid #f8b4b4;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    animation: shake 0.4s ease-in-out;
+}
+
+.error-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #9b1c1c;
+    margin-bottom: 0.5rem;
+}
+
+.error-details {
+    color: #c81e1e;
+    font-family: inherit;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    /* Keeps the bullet points on new lines */
+    margin: 0;
+}
+
+.close-error {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #9b1c1c;
+    cursor: pointer;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}

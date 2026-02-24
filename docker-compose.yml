@@ -1,5 +1,6 @@
 services:
   iris-backend:
+    # CHANGE: Point this to your actual backend folder, NOT medmatch-ui
     build: ./backend
     container_name: medmatch-iris-server
     ports:
@@ -7,11 +8,13 @@ services:
     volumes:
       - ./:/home/irisowner/dev
     ulimits:
-      stack: 67108864 # Increases Linux stack from 8MB to 64MB
-      memlock: -1 # Essential for Python/PyTorch memory mapping
+      stack: 67108864
+      memlock: -1
 
   angular-frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: medmatch-ui
     ports:
       - "8080:80"

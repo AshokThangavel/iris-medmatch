@@ -1,0 +1,128 @@
+<div class="list-container">
+    <div class="list-header">
+        <h1>Patient Directory</h1>
+        <div class="header-actions">
+            <!--span class="total-count" *ngIf="totalRecords">Total Records: {{totalRecords}}</span-->
+            <button class="btn-refresh" (click)="loadPatients('Patient?_sort=-_lastUpdated&_count=12')">
+                🔄 Refresh List
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <table class="standard-table">
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Birth Date</th>
+                    <th class="text-center">Clinical Actions</th>
+                </tr>
+            </thead>
+            <tbody [class.loading-opacity]="loading">
+                <tr *ngFor="let p of patients">
+                    <td><span class="id-badge">{{p.id}}</span></td>
+                    <td><strong>{{p.name?.[0]?.family}}, {{p.name?.[0]?.given?.[0]}}</strong></td>
+                    <td class="capitalize">{{p.gender}}</td>
+                    <td>{{p.birthDate}}</td>
+                    <td class="text-center">
+                        <button class="btn-action cond" (click)="openModal(p, 'condition')">
+                            + Condition
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="patients.length === 0 && !loading">
+                    <td colspan="5" class="text-center" style="padding: 2rem; color: #999;">
+                        No patients found.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination-bar">
+            <button class="btn-pager" [disabled]="!prevUrl || loading" (click)="loadPatients(prevUrl!)">
+                &laquo; Previous
+            </button>
+
+            <span class="page-info" *ngIf="!loading">
+                Showing <strong>{{patients.length}}</strong> of {{totalRecords}}
+            </span>
+            <span class="page-info" *ngIf="loading">Updating list...</span>
+
+            <button class="btn-pager" [disabled]="!nextUrl || loading" (click)="loadPatients(nextUrl!)">
+                Next &raquo;
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" *ngIf="selectedPatient" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+            <h3>Add {{activeAction | titlecase}}</h3>
+            <button class="close-x" (click)="closeModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="patient-mini-card">
+                <label>Target Patient:</label>
+                <strong>{{selectedPatient.name?.[0]?.family}}, {{selectedPatient.name?.[0]?.given?.[0]}}</strong>
+                <span class="id-tag">ID: {{selectedPatient.id}}</span>
+            </div>
+
+            <div [ngSwitch]="activeAction">
+                <div *ngSwitchCase="'condition'" class="fhir-form">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label>Clinical Status</label>
+                            <select [(ngModel)]="newCondition.clinicalStatus">
+                                <option value="active">Active</option>
+                                <option value="recurrence">Recurrence</option>
+                                <option value="relapse">Relapse</option>
+                                <option value="remission">Remission</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Severity</label>
+                            <select [(ngModel)]="newCondition.severity">
+                                <option value="255604002">Mild</option>
+                                <option value="6736007">Moderate</option>
+                                <option value="442452003">Severe</option>
+                            </select>
+                        </div>
+                        <div class="field full">
+                            <label>Diagnosis / Problem Name</label>
+                            <input type="text" [(ngModel)]="newCondition.display"
+                                placeholder="e.g. Hypertension, Seasonal Allergies..." (keyup.enter)="saveCondition()">
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="'encounter'">
+                    <div class="placeholder-msg">
+                        <p>Encounter setup for <strong>{{selectedPatient.id}}</strong> is currently being prepared.</p>
+                        <small>Future fields: Type, Location, Period, and Practitioner.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="progress-container" *ngIf="loading">
+                <div class="spinner-mini"></div>
+                <span class="status-text">{{ processingMessage }}</span>
+            </div>
+
+            <button class="btn-cancel" *ngIf="!loading" (click)="closeModal()">Cancel</button>
+
+            <button class="btn-save-modal"
+                [disabled]="loading || (activeAction === 'condition' && !newCondition.display)"
+                (click)="saveCondition()">
+                <span *ngIf="!loading">Confirm & Save</span>
+                <span *ngIf="loading">Processing...</span>
+            </button>
+        </div>
+    </div>
+</div>

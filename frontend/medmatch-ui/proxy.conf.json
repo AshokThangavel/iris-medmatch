@@ -1,0 +1,14 @@
+{
+    "/csp": {
+        "target": "http://localhost:52773",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    },
+    "/medmatch": {
+        "target": "http://localhost:52773",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    }
+}

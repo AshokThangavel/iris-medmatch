@@ -7,6 +7,8 @@ Property ResourceType As %String;
 
 Property NoteVector As %Vector(DATATYPE = "FLOAT", LEN = 384);
 
+Property ConditionText As %String(MAXLEN = 1000);
+
 Index ResIdx On (ResourceType, ResourceID) [ Unique ];
 
 ClassMethod SaveVector(type As %String = "", id As %String = "", text As %String = "") As %Status
@@ -20,9 +22,9 @@ ClassMethod SaveVector(type As %String = "", id As %String = "", text As %String
     Set vectorList = ##class(MedMatch.Engine).GetVector(text)
     Set vectorJson = vectorList.%ToJSON()
 
-    Set sql = "INSERT INTO MedMatch_Data.VectorIndex (ResourceType, ResourceID, NoteVector) " _
-             "VALUES (?, ?, TO_VECTOR(?, FLOAT, 384))"
-    Set rset = ##class(%SQL.Statement).%ExecDirect(, sql, type, id, vectorList)
+    Set sql = "INSERT INTO MedMatch_Data.VectorIndex (ResourceType, ResourceID, NoteVector,ConditionText) " _
+             "VALUES (?, ?, TO_VECTOR(?, FLOAT, 384),?)"
+    Set rset = ##class(%SQL.Statement).%ExecDirect(, sql, type, id, vectorList,text)
     If rset.%sqlcode {
         $$$ThrowSQLCODE(rset.%SQLCODE,rset.%Message)
     }
@@ -43,6 +45,12 @@ Storage Default
 </Value>
 <Value name="4">
 <Value>NoteVector</Value>
+</Value>
+<Value name="5">
+<Value>Condition</Value>
+</Value>
+<Value name="6">
+<Value>ConditionText</Value>
 </Value>
 </Data>
 <DataLocation>^MedMatch.Data.VectorIndexD</DataLocation>

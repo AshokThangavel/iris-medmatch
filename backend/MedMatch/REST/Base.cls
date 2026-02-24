@@ -11,12 +11,28 @@ ClassMethod GetContent()
 {
     #dim %request As %CSP.Request
 
-    If %request.Content=..#CONTENTTYPEJSON {
+    If %request.ContentType=..#CONTENTTYPEJSON {
         Set content = {}.%FromJSON(%request.Content)
     } Else  {
         Set content = %request.Content
     }
     Return content
+}
+
+ClassMethod GetStatusOK() As %DynamicObject [ CodeMode = expression ]
+{
+{"status":"ok"}
+}
+ClassMethod GetStatusError(pException) As %DynamicObject
+{
+    If $IsObject(pException) {
+        Set pException = pException.AsStatus()
+        Set message = $System.Status.GetErrorText(pException)
+    }
+    Else {
+        Set message = pException
+    }
+    Return {"status": "error", "message": (message)}
 }
 
 ClassMethod SetStatusCode(pStatus = 200)

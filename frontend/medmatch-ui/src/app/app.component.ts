@@ -1,5 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core'; // Added ChangeDetectorRef
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,11 +14,21 @@ export class AppComponent {
   loading: boolean = false;
   statusMessage: string = '';
 
+  isLoginPage(): boolean {
+    return this.router.url === '/login' || this.router.url === '/';
+  }
+
+  logout() {
+    localStorage.removeItem('fhir_auth'); // Clear credentials
+    this.router.navigate(['/login']);    // Redirect back to login
+  }
+
   private apiUrl = 'http://localhost:52773/medmatch/api/search';
 
   constructor(
     private http: HttpClient,
-    private cdr: ChangeDetectorRef // 1. Inject the Change Detector
+    private cdr: ChangeDetectorRef, // 1. Inject the Change Detector
+    private router: Router
   ) { }
 
   onSearch() {
