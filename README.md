@@ -15,9 +15,9 @@ An AI-powered patient matching engine built on **InterSystems IRIS**, utilizing 
 * **Modern UI**: Angular-based dashboard to visualize similarity scores and patient data.
 
 ## 🛠️ Tech Stack
-* **Core**: InterSystems IRIS (Vector Search & FHIR Server)
+* **Core**: InterSystems IRIS , Embedded Python, InterSystems FHIR Server, Vector search
 * **AI**: Python, ONNX Runtime, HuggingFace Transformers
-* **Frontend**: Angular 18+, Tailwind CSS
+* **Frontend**: Angular 18+
 * **DevOps**: Docker & Docker Compose
 
 ## 📦 Getting Started
@@ -64,13 +64,44 @@ Once the project is started, you can access the different layers of the applicat
 * **URL:** [http://localhost:8080](http://localhost:8080/)
 * **What it is:** This is the user-facing dashboard.
 * **What you can do here:** * Search for patients using natural language.
-* View clinical similarity scores (e.g., "Patient A is a 95% match").
 * Interact with the FHIR data visualized in a clean, modern UI.
-
 
 #### **2. Backend Management (InterSystems IRIS)**
 
 * **URL:** [http://localhost:52773/csp/sys/UtilHome.csp](http://localhost:52773/csp/sys/UtilHome.csp)
 * **What it is:** The **Management Portal** for the InterSystems IRIS database.
 
-<img width="1342" height="973" alt="image" src="https://github.com/user-attachments/assets/2199138d-431b-4711-bfef-5c909e2a114c" />
+## 🚀 Application Walkthrough
+
+### 1. Authentication
+
+* **Demo Credentials:** User: `_SYSTEM` | Pass: `SYS`
+
+<img width="1063" height="884" alt="image" src="https://github.com/user-attachments/assets/cd2cef0c-6d45-4fd8-bdd4-c0371f0bafe3" />
+
+### 2. Semantic Similarity Search (The "Wow" Factor)
+
+This module uses **Vector Search** to understand medical synonyms and clinical intent.
+
+* **How it works:** A search for "Cardiac Issues" will mathematically find "Myocardial Infarction" by comparing their vector positions in IRIS.
+* **Tech Highlight:** Uses **Embedded Python** to vectorize the search query and **Native IRIS SQL** to calculate similarity scores in sub-seconds.
+<img width="1778" height="1011" alt="image" src="https://github.com/user-attachments/assets/cb56826c-ab03-48ba-a40f-c510226bef2f" />
+
+## 3. Patient Directory & Condition Enrichment
+
+This module manages existing FHIR resources. Users can add new diagnoses through a high-performance modal.
+
+* **The Workflow:**
+1. Create `Condition` for the particular patient and stored into the **FHIR Server**. **Tech Highlight:** Demonstrates real-time synchronization between standard FHIR data and AI-ready Vector data.
+<img width="1866" height="1010" alt="image" src="https://github.com/user-attachments/assets/c99167d1-b13d-4344-a146-b36035c1d52e" />
+
+2. Add condition and save into `InterSystems iris fhir server`
+<img width="1168" height="889" alt="image" src="https://github.com/user-attachments/assets/3ef2442f-90e6-4379-a4d7-e90c4fb2fc57" />
+
+### 4. New Patient Registration
+
+A streamlined entry point for creating new `Patient` resources within the InterSystems ecosystem.
+
+* **Tech Highlight:** Direct interaction with the **FHIR R4 Repository** via standard RESTful POST requests, ensuring data is indexed and searchable immediately.
+<img width="1760" height="800" alt="image" src="https://github.com/user-attachments/assets/f4e92602-2a6e-4c04-82e9-39e49b39b4a1" />
+
